@@ -16,7 +16,7 @@ import {
 } from "@calcom/lib/constants";
 import logger from "@calcom/lib/logger";
 
-const log = logger.getChildLogger({ prefix: ["[api/logo]"] });
+const log = logger.getSubLogger({ prefix: ["[api/logo]"] });
 
 function removePort(url: string) {
   return url.replace(/:\d+$/, "");
@@ -187,7 +187,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     res.setHeader("Content-Type", response.headers.get("content-type") as string);
-    res.setHeader("Cache-Control", "s-maxage=86400");
+    res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate=60");
     res.send(buffer);
   } catch (error) {
     res.statusCode = 404;

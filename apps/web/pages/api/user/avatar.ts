@@ -1,15 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { z } from "zod";
 
-import { getSlugOrRequestedSlug, orgDomainConfig } from "@calcom/features/ee/organizations/lib/orgDomains";
+import {
+  orgDomainConfig,
+  whereClauseForOrgWithSlugOrRequestedSlug,
+} from "@calcom/features/ee/organizations/lib/orgDomains";
 import { AVATAR_FALLBACK } from "@calcom/lib/constants";
 import { getPlaceholderAvatar } from "@calcom/lib/defaultAvatarImage";
+import logger from "@calcom/lib/logger";
 import prisma from "@calcom/prisma";
 
+const log = logger.getSubLogger({ prefix: ["team/[slug]"] });
 const querySchema = z
   .object({
     username: z.string(),
     teamname: z.string(),
+    /**
+     * Passed when we want to fetch avatar of a particular organization
+     */
+    orgSlug: z.string(),
     /**
      * Allow fetching avatar of a particular organization
      * Avatars being public, we need not worry about others accessing it.
@@ -19,7 +28,7 @@ const querySchema = z
   .partial();
 
 async function getIdentityData(req: NextApiRequest) {
-  const { username, teamname, orgId } = querySchema.parse(req.query);
+  const { username, teamname, orgId, orgSlug } = querySchema.parse(req.query);
   const { currentOrgDomain, isValidOrgDomain } = orgDomainConfig(req.headers.host ?? "");
 
   const org = isValidOrgDomain ? currentOrgDomain : null;
@@ -29,7 +38,7 @@ async function getIdentityData(req: NextApiRequest) {
         id: orgId,
       }
     : org
-    ? getSlugOrRequestedSlug(org)
+    ? whereClauseForOrgWithSlugOrRequestedSlug(org)
     : null;
 
   if (username) {
@@ -40,6 +49,7 @@ async function getIdentityData(req: NextApiRequest) {
       },
       select: { avatar: true, email: true },
     });
+
     return {
       name: username,
       email: user?.email,
@@ -47,6 +57,7 @@ async function getIdentityData(req: NextApiRequest) {
       org,
     };
   }
+
   if (teamname) {
     const team = await prisma.team.findFirst({
       where: {
@@ -55,11 +66,38 @@ async function getIdentityData(req: NextApiRequest) {
       },
       select: { logo: true },
     });
+
     return {
       org,
       name: teamname,
       email: null,
-      avatar: team?.logo || getPlaceholderAvatar(null, teamname),
+      avatar: getPlaceholderAvatar(team?.logo, teamname),
+    };
+  }
+
+  if (orgSlug) {
+    const orgs = await prisma.team.findMany({
+      where: {
+        ...whereClauseForOrgWithSlugOrRequestedSlug(orgSlug),
+      },
+      select: {
+        slug: true,
+        logo: true,
+        name: true,
+      },
+    });
+
+    if (orgs.length > 1) {
+      // This should never happen, but instead of throwing error, we are just logging to be able to observe when it happens.
+      log.error("More than one organization found for slug", orgSlug);
+    }
+
+    const org = orgs[0];
+    return {
+      org: org?.slug,
+      name: org?.name,
+      email: null,
+      avatar: getPlaceholderAvatar(org?.logo, org?.name),
     };
   }
 }
@@ -67,6 +105,8 @@ async function getIdentityData(req: NextApiRequest) {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const identity = await getIdentityData(req);
   const img = identity?.avatar;
+  // We cache for one day
+  res.setHeader("Cache-Control", "s-maxage=86400, stale-while-revalidate=60");
   // If image isn't set or links to this route itself, use default avatar
   if (!img) {
     if (identity?.org) {

@@ -18,16 +18,18 @@ export type EventTypeInfo = {
 
 export type WebhookDataType = CalendarEvent &
   EventTypeInfo & {
-    metadata?: { [key: string]: string };
+    metadata?: { [key: string]: string | number | boolean | null };
     bookingId?: number;
     status?: string;
     smsReminderNumber?: string;
+    rescheduleId?: number;
     rescheduleUid?: string;
     rescheduleStartTime?: string;
     rescheduleEndTime?: string;
     triggerEvent: string;
     createdAt: string;
     downloadLink?: string;
+    paymentId?: number;
   };
 
 function getZapierPayload(

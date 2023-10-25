@@ -85,6 +85,7 @@ export const buildEventType = (eventType?: Partial<EventType>): EventType => {
     periodDays: null,
     periodCountCalendarDays: null,
     recurringEvent: null,
+    lockTimeZoneToggleOnBookingPage: false,
     requiresConfirmation: false,
     disableGuests: false,
     hideCalendarNotes: false,
@@ -93,6 +94,7 @@ export const buildEventType = (eventType?: Partial<EventType>): EventType => {
     afterEventBuffer: 0,
     seatsPerTimeSlot: null,
     seatsShowAttendees: null,
+    seatsShowAvailabilityCount: null,
     schedulingType: null,
     scheduleId: null,
     bookingLimits: null,
@@ -222,6 +224,7 @@ export const buildUser = <T extends Partial<UserPayload>>(user?: T): UserPayload
     weekStart: "",
     organizationId: null,
     allowSEOIndexing: null,
+    receiveMonthlyDigestEmail: null,
     ...user,
   };
 };

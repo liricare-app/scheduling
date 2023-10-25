@@ -170,12 +170,12 @@ async function getBookings({
     },
   };
 
-  const filtersCombined: Prisma.BookingWhereInput[] =
-    filters &&
-    Object.keys(filters).map((key) => {
-      return bookingWhereInputFilters[key];
-    });
-
+  const filtersCombined: Prisma.BookingWhereInput[] = !filters
+    ? []
+    : Object.keys(filters)
+        .map((key) => bookingWhereInputFilters[key])
+        // On prisma 5.4.2 passing undefined to where "AND" causes an error
+        .filter(Boolean);
   const bookingSelect = {
     ...bookingMinimalSelect,
     uid: true,
@@ -191,6 +191,7 @@ async function getBookings({
         currency: true,
         metadata: true,
         seatsShowAttendees: true,
+        seatsShowAvailabilityCount: true,
         team: {
           select: {
             id: true,
@@ -256,7 +257,7 @@ async function getBookings({
             userId: user.id,
           },
         ],
-        AND: [passedBookingsStatusFilter, ...(filtersCombined ?? [])],
+        AND: [passedBookingsStatusFilter, ...filtersCombined],
       },
       orderBy,
       take: take + 1,
@@ -273,7 +274,7 @@ async function getBookings({
             },
           },
         ],
-        AND: [passedBookingsStatusFilter, ...(filtersCombined ?? [])],
+        AND: [passedBookingsStatusFilter, ...filtersCombined],
       },
       orderBy,
       take: take + 1,
@@ -297,7 +298,7 @@ async function getBookings({
             },
           },
         ],
-        AND: [passedBookingsStatusFilter, ...(filtersCombined ?? [])],
+        AND: [passedBookingsStatusFilter, ...filtersCombined],
       },
       orderBy,
       take: take + 1,
@@ -316,7 +317,7 @@ async function getBookings({
             },
           },
         ],
-        AND: [passedBookingsStatusFilter, ...(filtersCombined ?? [])],
+        AND: [passedBookingsStatusFilter, ...filtersCombined],
       },
       orderBy,
       take: take + 1,

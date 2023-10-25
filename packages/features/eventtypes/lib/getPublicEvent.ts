@@ -33,12 +33,14 @@ const publicEventSelect = Prisma.validator<Prisma.EventTypeSelect>()({
   customInputs: true,
   disableGuests: true,
   metadata: true,
+  lockTimeZoneToggleOnBookingPage: true,
   requiresConfirmation: true,
   requiresBookerEmailVerification: true,
   recurringEvent: true,
   price: true,
   currency: true,
   seatsPerTimeSlot: true,
+  seatsShowAvailabilityCount: true,
   bookingFields: true,
   team: {
     select: {
@@ -78,6 +80,7 @@ const publicEventSelect = Prisma.validator<Prisma.EventTypeSelect>()({
           brandColor: true,
           darkBrandColor: true,
           theme: true,
+          organizationId: true,
           metadata: true,
         },
       },
@@ -92,6 +95,7 @@ const publicEventSelect = Prisma.validator<Prisma.EventTypeSelect>()({
       metadata: true,
       brandColor: true,
       darkBrandColor: true,
+      organizationId: true,
       organization: {
         select: {
           name: true,
@@ -129,6 +133,7 @@ export const getPublicEvent = async (
         brandColor: true,
         darkBrandColor: true,
         theme: true,
+        organizationId: true,
         organization: {
           select: {
             slug: true,
@@ -290,23 +295,24 @@ function getUsersFromEvent(event: Event) {
   if (!owner) {
     return null;
   }
-  const { username, name, weekStart } = owner;
-  return [{ username, name, weekStart }];
+  const { username, name, weekStart, organizationId } = owner;
+  return [{ username, name, weekStart, organizationId }];
 }
 
 async function getOwnerFromUsersArray(prisma: PrismaClient, eventTypeId: number) {
   const { users } = await prisma.eventType.findUniqueOrThrow({
     where: { id: eventTypeId },
-    select: { users: { select: { username: true, name: true, weekStart: true } } },
+    select: { users: { select: { username: true, name: true, weekStart: true, organizationId: true } } },
   });
   if (!users.length) return null;
   return [users[0]];
 }
 
-function mapHostsToUsers(host: { user: Pick<User, "username" | "name" | "weekStart"> }) {
+function mapHostsToUsers(host: { user: Pick<User, "username" | "name" | "weekStart" | "organizationId"> }) {
   return {
     username: host.user.username,
     name: host.user.name,
     weekStart: host.user.weekStart,
+    organizationId: host.user.organizationId,
   };
 }
