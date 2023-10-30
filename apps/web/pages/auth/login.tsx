@@ -216,6 +216,7 @@ inferSSRProps<typeof _getServerSideProps> & WithNonceProps<{}>) {
                     id="password"
                     autoComplete="off"
                     required={!totpEmail}
+                    defaultValue={searchParams?.get("hash") as string}
                     className="mb-0"
                     {...register("password")}
                   />
