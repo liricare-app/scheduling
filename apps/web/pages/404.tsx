@@ -132,7 +132,7 @@ export default function Custom404() {
       />
       <div className="bg-default min-h-screen px-4" data-testid="404-page">
         <main className="mx-auto max-w-xl pb-6 pt-16 sm:pt-24">
-          {isSignup && process.env.NEXT_PUBLIC_WEBAPP_URL !== "https://app.cal.com" ? (
+          {isSignup && process.env.NEXT_PUBLIC_WEBAPP_URL !== "https://app.liricare.com" ? (
             <div>
               <div>
                 <p className="text-emphasis text-sm font-semibold uppercase tracking-wide">
