@@ -92,7 +92,7 @@ class MyDocument extends Document<Props> {
               __html: `
                 (function(c,l,a,r,i,t,y){
                   c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/{YOUR_CLARITY_ID}";
+                  t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/jby72yx6dd";
                   y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
                 })(window, document, "clarity", "script", "jby72yx6dd");
               `,
