@@ -98,16 +98,22 @@ class MyDocument extends Document<Props> {
               `,
             }}
           />
-
-          {/* Add Google Tag Manager (noscript) */}
-          <noscript>
-            <iframe
-              src="https://www.googletagmanager.com/ns.html?id=GTM-P3ZJB64"
-              height="0"
-              width="0"
-              style={{ display: 'none', visibility: 'hidden' }}
-            />
-          </noscript>
+          
+          {/* Google Analytics Script */}
+          <script
+            async
+            src={`https://www.googletagmanager.com/gtag/js?id=G-YSFCLJLVRS`}
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-YSFCLJLVRS');
+              `,
+            }}
+          />
         </Head>
 
         <body
