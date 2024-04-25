@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import type { TFunction } from "next-i18next";
 import { useRouter, useSearchParams } from "next/navigation";
+import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 import type { FieldError } from "react-hook-form";
 import { useForm } from "react-hook-form";
@@ -395,12 +396,19 @@ export const BookEventFormChild = ({
             />
           </div>
         )}
+
+        <Script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async={true} defer={true} />
+        <div
+          className="cf-turnstile checkbox mt-auto flex justify-end p-2"
+          data-sitekey={process.env.NEXT_PUBLIC_CLOUDFLARE_TURNSTILE_SITE_KEY}
+        />
         <div className="modalsticky mt-auto flex justify-end space-x-2 rtl:space-x-reverse">
           {!!onCancel && (
             <Button color="minimal" type="button" onClick={onCancel} data-testid="back">
               {t("back")}
             </Button>
           )}
+
           <Button
             type="submit"
             color="primary"
