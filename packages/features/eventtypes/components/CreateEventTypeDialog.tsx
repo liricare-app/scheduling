@@ -253,7 +253,7 @@ export default function CreateEventTypeDialog({
                     type="number"
                     required
                     placeholder="$100"
-                    label="price"
+                    label="Price"
                     className="pr-4"
                     {...register("price", { valueAsNumber: true })}
                     onChange={(e) => {
