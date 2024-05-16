@@ -252,6 +252,7 @@ export default function CreateEventTypeDialog({
                   <TextField
                     type="number"
                     required
+                    min="0"
                     placeholder="$100"
                     label="Price"
                     className="pr-4"
