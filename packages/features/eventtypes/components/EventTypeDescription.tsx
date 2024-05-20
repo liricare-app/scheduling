@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import type { z } from "zod";
 
 import { Price } from "@calcom/features/bookings/components/event-meta/Price";
-import { getPriceIcon } from "@calcom/features/bookings/components/event-meta/getPriceIcon";
 import { classNames, parseRecurringEvent } from "@calcom/lib";
 import getPaymentAppData from "@calcom/lib/getPaymentAppData";
 import { useLocale } from "@calcom/lib/hooks/useLocale";
@@ -94,17 +93,11 @@ export const EventTypeDescription = ({
               </Badge>
             </li>
           )}
-          {paymentAppData.enabled && (
-            <li>
-              <Badge variant="gray" startIcon={getPriceIcon(paymentAppData.currency)}>
-                <Price
-                  currency={paymentAppData.currency}
-                  price={paymentAppData.price}
-                  displayAlternateSymbol={false}
-                />
-              </Badge>
-            </li>
-          )}
+          <li>
+            <Badge variant="gray" startIcon="$">
+              <Price currency="$" price={eventType.price} displayAlternateSymbol={false} />
+            </Badge>
+          </li>
           {eventType.requiresConfirmation && (
             <li className="hidden xl:block">
               <Badge variant="gray" startIcon={Clipboard}>
