@@ -95,7 +95,7 @@ export const EventTypeDescription = ({
           )}
           <li>
             <Badge variant="gray" startIcon="$">
-              <Price currency="usd" price={eventType.price} displayAlternateSymbol={false} />
+              <Price currency={eventType.currency} price={eventType.price} displayAlternateSymbol={false} />
             </Badge>
           </li>
           {eventType.requiresConfirmation && (
