@@ -417,23 +417,27 @@ export const BookEventFormChild = ({
             </Button>
           )}
 
-          {eventType?.price > 0 && eventType?.paymentPending && (
-            <Button color="primary" type="button" onClick={processPayments}>
-              Pay Now
+          {/* eventType?.price > 0 && eventType?.paymentPending && ( */}
+          {/* Temp fix for testing */}
+          <Button color="primary" type="button" onClick={processPayments}>
+            Pay Now
+          </Button>
+
+          {!(eventType?.price && eventType?.paymentPending) && (
+            <Button
+              type="submit"
+              color="primary"
+              loading={createBookingMutation.isLoading || createRecurringBookingMutation.isLoading}
+              data-testid={
+                rescheduleUid && bookingData ? "confirm-reschedule-button" : "confirm-book-button"
+              }>
+              {rescheduleUid && bookingData
+                ? t("reschedule")
+                : renderConfirmNotVerifyEmailButtonCond
+                ? t("confirm")
+                : t("verify_email_email_button")}
             </Button>
           )}
-
-          <Button
-            type="submit"
-            color="primary"
-            loading={createBookingMutation.isLoading || createRecurringBookingMutation.isLoading}
-            data-testid={rescheduleUid && bookingData ? "confirm-reschedule-button" : "confirm-book-button"}>
-            {rescheduleUid && bookingData
-              ? t("reschedule")
-              : renderConfirmNotVerifyEmailButtonCond
-              ? t("confirm")
-              : t("verify_email_email_button")}
-          </Button>
         </div>
       </Form>
       <VerifyCodeDialog
