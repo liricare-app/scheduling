@@ -417,11 +417,11 @@ export const BookEventFormChild = ({
             </Button>
           )}
 
-          {/* eventType?.price > 0 && eventType?.paymentPending && ( */}
-          {/* Temp fix for testing */}
-          <Button color="primary" type="button" onClick={processPayments}>
-            Pay Now
-          </Button>
+          {eventType?.price && eventType?.paymentPending && (
+            <Button color="primary" type="button" onClick={processPayments}>
+              Pay Now
+            </Button>
+          )}
 
           {!(eventType?.price && eventType?.paymentPending) && (
             <Button
