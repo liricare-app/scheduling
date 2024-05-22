@@ -418,13 +418,7 @@ export const BookEventFormChild = ({
           )}
 
           {eventType?.price > 0 && eventType?.paymentPending && (
-            <Button
-              color="primary"
-              type="button"
-              onClick={processPayments}
-              data-testid={
-                rescheduleUid && bookingData ? "confirm-reschedule-button" : "confirm-book-button"
-              }>
+            <Button color="primary" type="button" onClick={processPayments}>
               Pay Now
             </Button>
           )}
