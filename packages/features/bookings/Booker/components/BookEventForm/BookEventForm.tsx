@@ -357,6 +357,14 @@ export const BookEventFormChild = ({
   const renderConfirmNotVerifyEmailButtonCond =
     !eventType?.requiresBookerEmailVerification || (email && verifiedEmail && verifiedEmail === email);
 
+  const processPayments = () => {
+    const newWindow = window.open(
+      "https://buy.stripe.com/test_3cseYQ5nw8sN0HSaEG",
+      "_blank",
+      "noopener,noreferrer"
+    );
+  };
+
   return (
     <div className="flex h-full flex-col">
       <Form
@@ -406,6 +414,18 @@ export const BookEventFormChild = ({
           {!!onCancel && (
             <Button color="minimal" type="button" onClick={onCancel} data-testid="back">
               {t("back")}
+            </Button>
+          )}
+
+          {eventType?.price > 0 && eventType?.paymentPending && (
+            <Button
+              color="primary"
+              type="button"
+              onClick={processPayments}
+              data-testid={
+                rescheduleUid && bookingData ? "confirm-reschedule-button" : "confirm-book-button"
+              }>
+              Pay Now
             </Button>
           )}
 
