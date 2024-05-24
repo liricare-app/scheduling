@@ -365,6 +365,8 @@ export const BookEventFormChild = ({
     );
   };
 
+  console.log("EventType:", eventType);
+
   return (
     <div className="flex h-full flex-col">
       <Form
@@ -417,13 +419,13 @@ export const BookEventFormChild = ({
             </Button>
           )}
 
-          {eventType?.price && eventType?.paymentPending && (
+          {eventType?.price > 0 && eventType?.paymentPending && (
             <Button color="primary" type="button" onClick={processPayments}>
               Pay Now
             </Button>
           )}
 
-          {!(eventType?.price && eventType?.paymentPending) && (
+          {!(eventType?.price > 0 && eventType?.paymentPending) && (
             <Button
               type="submit"
               color="primary"
