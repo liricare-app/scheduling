@@ -419,13 +419,16 @@ export const BookEventFormChild = ({
             </Button>
           )}
 
-          {eventType?.price > 0 && eventType?.paymentPending && (
+          {/* eventType?.paymentPending */}
+          {/* Temp removed this condition will be added */}
+
+          {eventType?.price > 0 && (
             <Button color="primary" type="button" onClick={processPayments}>
               Pay Now
             </Button>
           )}
 
-          {!(eventType?.price > 0 && eventType?.paymentPending) && (
+          {!(eventType?.price > 0) && (
             <Button
               type="submit"
               color="primary"
