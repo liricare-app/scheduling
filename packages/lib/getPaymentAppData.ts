@@ -5,6 +5,7 @@ import type { appDataSchemas } from "@calcom/app-store/apps.schemas.generated";
 import type { appDataSchema, paymentOptionEnum } from "@calcom/app-store/stripepayment/zod";
 import type { EventTypeAppsList } from "@calcom/app-store/utils";
 
+// this payment App Data we have to see the behavior of sending credentialId
 export default function getPaymentAppData(
   eventType: Parameters<typeof getEventTypeAppData>[0],
   forcedGet?: boolean
@@ -36,6 +37,7 @@ export default function getPaymentAppData(
       paymentAppData = {
         ...appData,
         appId,
+        credentialId: 58,
       };
     }
   }
@@ -48,7 +50,7 @@ export default function getPaymentAppData(
       currency: "usd",
       appId: null,
       paymentOption: "ON_BOOKING",
-      credentialId: undefined,
+      credentialId: 58,
     }
   );
 }
