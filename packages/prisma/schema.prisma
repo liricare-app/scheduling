@@ -107,7 +107,7 @@ model EventType {
   price                           Int                     @default(0)
   // currency is deprecated. It has now moved to metadata.apps.stripe.currency. Plan to drop this column.
   currency                        String                  @default("usd")
-  paymentPending                  Boolean                 @default(true)
+  // paymentPending                  Boolean                 @default(true)
   slotInterval                    Int?
   /// @zod.custom(imports.EventTypeMetaDataSchema)
   metadata                        Json?
