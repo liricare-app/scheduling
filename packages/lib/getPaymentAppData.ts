@@ -5,12 +5,22 @@ import type { appDataSchemas } from "@calcom/app-store/apps.schemas.generated";
 import type { appDataSchema, paymentOptionEnum } from "@calcom/app-store/stripepayment/zod";
 import type { EventTypeAppsList } from "@calcom/app-store/utils";
 
-// this payment App Data we have to see the behavior of sending credentialId
 export default function getPaymentAppData(
   eventType: Parameters<typeof getEventTypeAppData>[0],
   forcedGet?: boolean
 ) {
   const metadataApps = eventType?.metadata?.apps as unknown as EventTypeAppsList;
+  // Only for liricare centralize paiement with the field price and the credentialId
+  if (eventType?.price > 0 && parseInt(process.env.NEXT_PUBLIC_CREDENTIAL_ID, 10) > 0) {
+    return {
+      enabled: true,
+      price: eventType?.price,
+      currency: "usd",
+      appId: "stripe",
+      paymentOption: "ON_BOOKING",
+      credentialId: parseInt(process.env.NEXT_PUBLIC_CREDENTIAL_ID, 10),
+    };
+  }
   if (!metadataApps) {
     return { enabled: false, price: 0, currency: "usd", appId: null };
   }
@@ -37,7 +47,6 @@ export default function getPaymentAppData(
       paymentAppData = {
         ...appData,
         appId,
-        credentialId: 58,
       };
     }
   }
@@ -50,7 +59,7 @@ export default function getPaymentAppData(
       currency: "usd",
       appId: null,
       paymentOption: "ON_BOOKING",
-      credentialId: 58,
+      credentialId: undefined,
     }
   );
 }

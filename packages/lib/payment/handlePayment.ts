@@ -56,8 +56,9 @@ const handlePayment = async (
   } else {
     paymentData = await paymentInstance.create(
       {
-        amount: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].price,
-        currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency,
+        amount:
+          selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].price || selectedEventType?.price,
+        currency: selectedEventType?.metadata?.apps?.[paymentAppCredentials.appId].currency || "usd",
       },
       booking.id,
       booking.userId,
