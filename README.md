@@ -1,3 +1,6 @@
+# WARNING
+THIS PROJECT IS NOT USED ANYMORE FOR LIRICARE BOOKING, please refer to [scheduling-cal](https://github.com/liricare-app/scheduling-cal)
+
 <!-- PROJECT LOGO  -->
 <p align="center">
   <a href="https://github.com/calcom/cal.com">
