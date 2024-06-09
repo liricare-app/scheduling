@@ -464,6 +464,15 @@ export const EventSetupTab = (
             defaultValue={eventType.title}
             {...formMethods.register("title")}
           />
+          <TextField
+            required
+            label={t("price")}
+            {...shouldLockDisableProps("price")}
+            defaultValue={eventType?.price}
+            {...formMethods.register("price", {
+              setValueAs: (v) => parseInt(v, 10),
+            })}
+          />
           <div>
             <Label>
               {t("description")}
